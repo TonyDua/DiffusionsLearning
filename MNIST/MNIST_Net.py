@@ -17,12 +17,11 @@
 
 import torch
 import torchvision
-
+import torch.nn.functional as F
 from matplotlib import pyplot as plt
 from torch import nn, optim
 from torch.utils.data import DataLoader
 from torchvision import transforms
-
 
 # 定义神经网络Network
 class Network(nn.Module):
@@ -45,7 +44,7 @@ class Network(nn.Module):
 
         x = x.view(-1, 28 * 28)  # 使用view函数 将x展平
         x = self.layer1(x)  # 将x输入到layer1层
-        x = torch.relu(x)  # 使用relu进行激活函数 通常写为 F.relu
+        x = F.relu(x)  # 使用relu进行激活函数
         return self.layer2(x)  # 输入layer2层返回结果
 
 
@@ -97,7 +96,7 @@ def train(loader: DataLoader,epochs: int = 10):
 
     torch.save(model.state_dict(), f'mnist_{epochs}.pth')
 
-
+@torch.no_grad() # 验证模型禁用梯度计算
 def eval_model(loader: DataLoader,epochs: int = 10):
 
     model = Network()
